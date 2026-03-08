@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useSearchParams, Link } from 'react-router-dom'
 import { api } from '../api'
 
 const SPLIT_TYPES = [
@@ -13,6 +13,7 @@ const defaultSplitType = 'EQUAL'
 
 export default function Expenses() {
   const [searchParams] = useSearchParams()
+  const token = localStorage.getItem('splitwise_token')
   const userId = localStorage.getItem('splitwise_userId') || ''
   const groupIdFromUrl = searchParams.get('groupId') || ''
 
@@ -32,16 +33,16 @@ export default function Expenses() {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    if (!userId) return
+    if (!token) return
     Promise.all([
-      api.groups.listForUser(userId).catch(() => []),
+      api.groups.list().catch(() => []),
       api.users.list().catch(() => []),
     ]).then(([g, u]) => {
       setGroups(g)
       setUsers(u)
       if (groupIdFromUrl) setGroupId(groupIdFromUrl)
     })
-  }, [userId, groupIdFromUrl])
+  }, [token, groupIdFromUrl])
 
   const selectedGroup = groupId ? groups.find(g => g.id === groupId) : null
   const groupMembers = selectedGroup?.memberIds?.length
@@ -159,7 +160,7 @@ export default function Expenses() {
       <h1 className="page-title mb-2 animate-in">Add expense</h1>
       <p className="mb-8 text-slate-500 animate-in-delay-1">Split a <span className="keyword">bill</span> with a group or between participants.</p>
 
-      {!userId && <div className="alert-warning mb-8">Log in and set your user on the <span className="keyword">Dashboard</span> first.</div>}
+      {!token && <div className="alert-warning mb-8">Please <Link to="/login" className="link">log in</Link> to add expenses.</div>}
 
       <form onSubmit={handleSubmit} className="card max-w-lg p-8 animate-in-delay-2 shadow-lg">
         {error && <div className="alert-error mb-6">{error}</div>}

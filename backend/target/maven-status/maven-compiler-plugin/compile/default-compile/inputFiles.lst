@@ -28,7 +28,6 @@
 /Users/rajatkumardabas/splitwise/backend/src/main/java/com/splitwise/split/SplitStrategyFactory.java
 /Users/rajatkumardabas/splitwise/backend/src/main/java/com/splitwise/dto/CreateUserRequest.java
 /Users/rajatkumardabas/splitwise/backend/src/main/java/com/splitwise/config/WebConfig.java
-/Users/rajatkumardabas/splitwise/backend/src/main/java/com/splitwise/service/AuthTokenStore.java
 /Users/rajatkumardabas/splitwise/backend/src/main/java/com/splitwise/dto/LoginResponse.java
 /Users/rajatkumardabas/splitwise/backend/src/main/java/com/splitwise/config/SecurityConfig.java
 /Users/rajatkumardabas/splitwise/backend/src/main/java/com/splitwise/controller/ExpenseController.java
@@ -41,6 +40,8 @@
 /Users/rajatkumardabas/splitwise/backend/src/main/java/com/splitwise/exception/UnauthorizedException.java
 /Users/rajatkumardabas/splitwise/backend/src/main/java/com/splitwise/dto/UpdateGroupRequest.java
 /Users/rajatkumardabas/splitwise/backend/src/main/java/com/splitwise/split/SplitStrategy.java
+/Users/rajatkumardabas/splitwise/backend/src/main/java/com/splitwise/config/JwtAuthFilter.java
+/Users/rajatkumardabas/splitwise/backend/src/main/java/com/splitwise/config/JwtService.java
 /Users/rajatkumardabas/splitwise/backend/src/main/java/com/splitwise/repository/SettlementRepository.java
 /Users/rajatkumardabas/splitwise/backend/src/main/java/com/splitwise/controller/SettlementController.java
 /Users/rajatkumardabas/splitwise/backend/src/main/java/com/splitwise/dto/ExpenseDto.java

@@ -14,11 +14,13 @@ export default function Users() {
     e.preventDefault()
     setError('')
     try {
-      await api.users.create(name, email, password)
+      const { user, token } = await api.auth.signup(name, email, password)
+      localStorage.setItem('splitwise_token', token)
+      localStorage.setItem('splitwise_userId', user.id)
       setName('')
       setEmail('')
       setPassword('')
-      navigate('/login', { replace: true })
+      navigate('/', { replace: true })
     } catch (err) {
       setError(err.message)
     }

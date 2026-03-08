@@ -13,6 +13,7 @@ export default function Profile() {
   }, [])
 
   function logout() {
+    api.auth.logout().catch(() => {})
     localStorage.removeItem('splitwise_token')
     localStorage.removeItem('splitwise_userId')
     navigate('/login', { replace: true })

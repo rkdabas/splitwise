@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { api } from '../api'
 
 export default function Groups() {
-  const userId = localStorage.getItem('splitwise_userId') || ''
+  const token = localStorage.getItem('splitwise_token')
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [groups, setGroups] = useState([])
@@ -14,20 +14,20 @@ export default function Groups() {
   const [editDesc, setEditDesc] = useState('')
 
   useEffect(() => {
-    if (!userId) return
+    if (!token) return
     setLoading(true)
-    api.groups.listForUser(userId).then(setGroups).catch(e => setError(e.message)).finally(() => setLoading(false))
-  }, [userId])
+    api.groups.list().then(setGroups).catch(e => setError(e.message)).finally(() => setLoading(false))
+  }, [token])
 
   async function handleCreate(e) {
     e.preventDefault()
-    if (!userId) {
-      setError('Set your user ID on Dashboard first.')
+    if (!token) {
+      setError('Please log in first.')
       return
     }
     setError('')
     try {
-      const g = await api.groups.create(name, description, userId)
+      const g = await api.groups.create(name, description)
       setGroups(prev => [g, ...prev])
       setName('')
       setDescription('')
@@ -73,7 +73,7 @@ export default function Groups() {
       <h1 className="page-title mb-2 animate-in">Groups</h1>
       <p className="mb-8 text-slate-500 animate-in-delay-1"><span className="keyword">Create</span> and <span className="keyword">manage</span> groups to split expenses with.</p>
 
-      {!userId && <div className="alert-warning mb-8">Set your user on the <span className="keyword">Dashboard</span> first.</div>}
+      {!token && <div className="alert-warning mb-8">Please <Link to="/login" className="link">log in</Link> to create and view groups.</div>}
 
       <form onSubmit={handleCreate} className="card mb-10 max-w-md p-8 animate-in-delay-2 shadow-lg">
         <h2 className="section-title mb-6">Create group</h2>
@@ -87,7 +87,7 @@ export default function Groups() {
             <label className="label">Description</label>
             <input type="text" value={description} onChange={e => setDescription(e.target.value)} className="input-base" />
           </div>
-          <button type="submit" className="btn-primary w-full py-3" disabled={!userId}>Create group</button>
+          <button type="submit" className="btn-primary w-full py-3" disabled={!token}>Create group</button>
         </div>
       </form>
 

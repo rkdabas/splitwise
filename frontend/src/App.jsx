@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom'
 import Dashboard from './pages/Dashboard'
 import Users from './pages/Users'
 import Login from './pages/Login'
@@ -7,9 +7,11 @@ import Groups from './pages/Groups'
 import GroupDetail from './pages/GroupDetail'
 import Expenses from './pages/Expenses'
 import Settlements from './pages/Settlements'
+import { api } from './api'
 
 function Nav() {
   const loc = useLocation()
+  const navigate = useNavigate()
   const token = typeof localStorage !== 'undefined' ? localStorage.getItem('splitwise_token') : null
   const link = (path, label) => {
     const isActive = loc.pathname === path
@@ -24,6 +26,13 @@ function Nav() {
       </Link>
     )
   }
+  function handleLogout() {
+    api.auth.logout().catch(() => {})
+    localStorage.removeItem('splitwise_token')
+    localStorage.removeItem('splitwise_userId')
+    navigate('/login', { replace: true })
+    window.location.reload()
+  }
   return (
     <nav className="sticky top-0 z-20 border-b border-slate-200/90 bg-white/90 backdrop-blur-xl shadow-[0_2px_20px_rgba(0,0,0,0.06)]">
       <div className="mx-auto flex max-w-5xl items-center gap-1 px-4 h-16">
@@ -35,8 +44,15 @@ function Nav() {
           {link('/groups', 'Groups')}
           {link('/expenses', 'Expenses')}
           {link('/settlements', 'Settle')}
-          {link('/users', 'Register')}
-          {token ? link('/profile', 'Profile') : link('/login', 'Login')}
+          {link('/users', 'Sign up')}
+          {token ? (
+            <>
+              {link('/profile', 'Profile')}
+              <button type="button" onClick={handleLogout} className="relative px-4 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-all duration-200">Logout</button>
+            </>
+          ) : (
+            link('/login', 'Login')
+          )}
         </div>
       </div>
     </nav>

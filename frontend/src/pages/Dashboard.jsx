@@ -7,28 +7,19 @@ export default function Dashboard() {
   const [groups, setGroups] = useState([])
   const [loading, setLoading] = useState(true)
 
-  const userId = localStorage.getItem('splitwise_userId') || ''
   const token = localStorage.getItem('splitwise_token')
 
   useEffect(() => {
-    if (!userId && !token) {
+    if (!token) {
       setLoading(false)
       return
     }
     setLoading(true)
-    const promises = []
-    if (token) {
-      promises.push(api.auth.me().then(setUser).catch(() => setUser(null)))
-    } else {
-      promises.push(userId ? api.users.get(userId).then(u => setUser({ id: u.id, name: u.name, email: u.email })).catch(() => setUser(null)) : Promise.resolve(setUser(null)))
-    }
-    if (userId) {
-      promises.push(api.groups.listForUser(userId).then(setGroups).catch(() => setGroups([])))
-    } else {
-      promises.push(Promise.resolve(setGroups([])))
-    }
-    Promise.all(promises).finally(() => setLoading(false))
-  }, [userId, token])
+    Promise.all([
+      api.auth.me().then(setUser).catch(() => setUser(null)),
+      api.groups.list().then(setGroups).catch(() => setGroups([])),
+    ]).finally(() => setLoading(false))
+  }, [token])
 
   if (loading) {
     return (
@@ -41,7 +32,7 @@ export default function Dashboard() {
     )
   }
 
-  if (!user && !userId) {
+  if (!user && !token) {
     return (
       <div className="relative max-w-2xl">
         <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-64 h-64 rounded-full bg-emerald-300/30 blur-[60px] animate-[orbFloat_12s_ease-in-out_infinite] pointer-events-none" />

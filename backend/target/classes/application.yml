@@ -16,6 +16,10 @@ spring:
       hibernate.format_sql: true
     open-in-view: false
 
+jwt:
+  secret: ${JWT_SECRET:splitwise-jwt-secret-key-min-256-bits-for-hs256-please-change-in-production}
+  expiration-ms: ${JWT_EXPIRATION_MS:86400000}
+
 logging:
   level:
     com.splitwise: INFO

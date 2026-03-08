@@ -1,5 +1,6 @@
 package com.splitwise.controller;
 
+import com.splitwise.dto.CreateUserRequest;
 import com.splitwise.dto.LoginRequest;
 import com.splitwise.dto.LoginResponse;
 import com.splitwise.dto.UserDto;
@@ -19,6 +20,17 @@ public class AuthController {
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest req) {
         LoginResponse res = authService.login(req.getEmail(), req.getPassword());
         return ResponseEntity.ok(res);
+    }
+
+    @PostMapping("/signup")
+    public ResponseEntity<LoginResponse> signup(@RequestBody CreateUserRequest req) {
+        LoginResponse res = authService.signup(req.getName(), req.getEmail(), req.getPassword());
+        return ResponseEntity.ok(res);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout() {
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/me")

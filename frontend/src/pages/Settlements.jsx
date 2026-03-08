@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { api } from '../api'
 
 export default function Settlements() {
+  const token = localStorage.getItem('splitwise_token')
   const userId = localStorage.getItem('splitwise_userId') || ''
   const [groups, setGroups] = useState([])
   const [users, setUsers] = useState([])
@@ -20,21 +21,21 @@ export default function Settlements() {
     : []
 
   useEffect(() => {
-    if (!userId) return
-    api.groups.listForUser(userId).then(async (g) => {
+    if (!token) return
+    api.groups.list().then(async (g) => {
       setGroups(g)
       const u = await api.users.list().catch(() => [])
       setUsers(u)
       if (g.length && !groupId) setGroupId(g[0].id)
       const byGroup = await Promise.all(
         g.map(async (gr) => {
-          const b = await api.balances.get(userId, gr.id).catch(() => [])
+          const b = await api.balances.get(gr.id).catch(() => [])
           return { group: gr, balances: b }
         })
       )
       setBalancesByGroup(byGroup)
     }).catch(() => setGroups([]))
-  }, [userId])
+  }, [token])
 
   useEffect(() => {
     if (groupId && groups.length && users.length) {
@@ -71,7 +72,7 @@ export default function Settlements() {
       setCreated({ ...s, groupName: group?.name })
       const byGroup = await Promise.all(
         groups.map(async (gr) => {
-          const b = await api.balances.get(userId, gr.id).catch(() => [])
+          const b = await api.balances.get(gr.id).catch(() => [])
           return { group: gr, balances: b }
         })
       )
@@ -86,9 +87,9 @@ export default function Settlements() {
       <h1 className="page-title mb-2 animate-in">Settle up</h1>
       <p className="mb-8 text-slate-500 animate-in-delay-1">See what you <span className="keyword">owe</span> and who <span className="keyword">owes you</span> by group, then <span className="keyword">record a payment</span> below.</p>
 
-      {!userId && <div className="alert-warning mb-8">Log in and set your user on the <span className="keyword">Dashboard</span> first.</div>}
+      {!token && <div className="alert-warning mb-8">Please <Link to="/login" className="link">log in</Link> to see balances and record settlements.</div>}
 
-      {userId && balancesByGroup.length > 0 && (
+      {token && balancesByGroup.length > 0 && (
         <section className="mb-10">
           <h2 className="section-title mb-4">What you need to pay / get — by group</h2>
           <div className="space-y-4">
@@ -183,7 +184,7 @@ export default function Settlements() {
             <label className="label">Amount (₹)</label>
             <input type="number" step="0.01" value={amountCents} onChange={e => setAmountCents(e.target.value)} className="input-base" required />
           </div>
-          <button type="submit" className="btn-primary w-full py-3" disabled={!userId}>Record settlement</button>
+          <button type="submit" className="btn-primary w-full py-3" disabled={!token}>Record settlement</button>
         </div>
       </form>
     </div>

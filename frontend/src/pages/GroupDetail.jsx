@@ -19,6 +19,7 @@ export default function GroupDetail() {
   const [editGroupDesc, setEditGroupDesc] = useState('')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const token = localStorage.getItem('splitwise_token')
   const userId = localStorage.getItem('splitwise_userId') || ''
   const [expandedExpenseId, setExpandedExpenseId] = useState(null)
   const [expandedSettlementId, setExpandedSettlementId] = useState(null)
@@ -51,8 +52,12 @@ export default function GroupDetail() {
   }
 
   useEffect(() => {
+    if (!token || !groupId) {
+      setLoading(false)
+      return
+    }
     load()
-  }, [groupId, userId])
+  }, [groupId, token])
 
   const memberIdsSet = group ? new Set(group.memberIds) : new Set()
   const availableUsers = users.filter(u => !memberIdsSet.has(u.id))
@@ -163,6 +168,13 @@ export default function GroupDetail() {
     return (
       <div className="flex min-h-[40vh] items-center justify-center">
         <div className="h-8 w-8 animate-spin rounded-full border-2 border-slate-200 border-t-emerald-500" />
+      </div>
+    )
+  }
+  if (!token) {
+    return (
+      <div className="card max-w-md p-6">
+        <p className="text-slate-600">Please <Link to="/login" className="link">log in</Link> to view this group.</p>
       </div>
     )
   }
