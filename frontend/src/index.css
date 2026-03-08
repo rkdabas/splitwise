@@ -1,0 +1,167 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-primary: 16 185 129;
+    --color-primary-hover: 5 150 105;
+    --color-surface: 255 255 255;
+    --color-muted: 100 116 139;
+    --color-border: 226 232 240;
+    --radius-card: 1rem;
+    --radius-input: 0.75rem;
+    --radius-button: 0.75rem;
+    --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.05), 0 1px 2px -1px rgb(0 0 0 / 0.05);
+    --shadow-card-hover: 0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+    --shadow-nav: 0 1px 3px 0 rgb(0 0 0 / 0.04);
+    --bg-3d-start: #f0fdf4;
+    --bg-3d-mid: #ecfeff;
+    --bg-3d-end: #faf5ff;
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: linear-gradient(165deg, var(--bg-3d-start) 0%, var(--bg-3d-mid) 45%, var(--bg-3d-end) 100%);
+    background-attachment: fixed;
+    @apply text-slate-800 min-h-screen;
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-2xl border border-slate-200/90 bg-white shadow-[var(--shadow-card)];
+  }
+  .card-hover {
+    @apply transition-all duration-200 hover:border-emerald-200/80 hover:shadow-[var(--shadow-card-hover)];
+  }
+  .card-3d {
+    @apply rounded-2xl border border-slate-200/90 bg-white shadow-[var(--shadow-card)];
+    transform: perspective(800px) rotateX(0deg) translateY(0) translateZ(0);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease, border-color 0.2s ease;
+  }
+  .card-3d:hover {
+    transform: perspective(800px) rotateX(-2deg) translateY(-6px) translateZ(8px);
+    box-shadow: 0 20px 40px -15px rgb(0 0 0 / 0.12), 0 8px 20px -8px rgb(0 0 0 / 0.08);
+    @apply border-emerald-200/80;
+  }
+  .card-3d-websline {
+    @apply rounded-2xl border border-slate-200/90 bg-white/90 backdrop-blur-sm;
+    transform: perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0);
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.5s ease, filter 0.3s ease;
+    box-shadow: 0 4px 20px -4px rgb(0 0 0 / 0.08), 0 2px 8px -2px rgb(0 0 0 / 0.04);
+  }
+  .card-3d-websline:hover {
+    transform: perspective(1000px) rotateX(-4deg) rotateY(2deg) translateY(-8px) translateZ(20px);
+    box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.15), 0 12px 24px -8px rgb(16 185 129 / 0.12);
+    filter: brightness(1.02);
+  }
+  .hover-tilt-3d {
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .hover-tilt-3d:hover {
+    transform: perspective(800px) rotateX(-2deg) rotateY(1deg) translateZ(4px);
+  }
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-xl bg-emerald-600 px-5 py-2.5 font-semibold text-white shadow-sm;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .btn-primary:hover {
+    @apply bg-emerald-700;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgb(16 185 129 / 0.35);
+  }
+  .btn-primary:active {
+    transform: translateY(0) scale(0.98);
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-xl border-2 border-slate-200 bg-white px-5 py-2.5 font-semibold text-slate-700
+           transition-all duration-200 hover:border-slate-300 hover:bg-slate-50 active:scale-[0.98];
+  }
+  .keyword {
+    @apply font-bold text-slate-900;
+  }
+  .input-base {
+    @apply w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-slate-800 placeholder:text-slate-400
+           transition-colors focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20;
+  }
+  .page-title {
+    @apply text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl;
+  }
+  .section-title {
+    @apply text-lg font-semibold text-slate-800;
+  }
+  .alert-error {
+    @apply rounded-xl border border-red-200/80 bg-red-50 px-4 py-3 text-sm text-red-800;
+  }
+  .alert-success {
+    @apply rounded-xl border border-emerald-200/80 bg-emerald-50 px-4 py-3 text-sm text-emerald-800;
+  }
+  .alert-warning {
+    @apply rounded-xl border border-amber-200/80 bg-amber-50 px-4 py-3 text-sm text-amber-800;
+  }
+  .label {
+    @apply block text-sm font-medium text-slate-600 mb-1.5;
+  }
+  .link {
+    @apply font-medium text-emerald-600 underline-offset-2 hover:underline;
+  }
+}
+
+.animate-in { opacity: 0; animation: fadeInUp 0.55s ease-out forwards; }
+.animate-in-delay-1 { opacity: 0; animation: fadeInUp 0.55s ease-out 0.1s forwards; }
+.animate-in-delay-2 { opacity: 0; animation: fadeInUp 0.55s ease-out 0.2s forwards; }
+.animate-in-delay-3 { opacity: 0; animation: fadeInUp 0.55s ease-out 0.3s forwards; }
+.animate-in-delay-4 { opacity: 0; animation: fadeInUp 0.55s ease-out 0.4s forwards; }
+.animate-in-delay-5 { opacity: 0; animation: fadeInUp 0.55s ease-out 0.5s forwards; }
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Websline-style 3D theme */
+.scene-3d {
+  perspective: 1200px;
+  transform-style: preserve-3d;
+}
+.orb-3d {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40px);
+  opacity: 0.5;
+  will-change: transform;
+  pointer-events: none;
+}
+.orb-3d--emerald {
+  background: radial-gradient(circle at 30% 30%, #6ee7b7, #10b981);
+  animation: orbFloat 8s ease-in-out infinite;
+}
+.orb-3d--cyan {
+  background: radial-gradient(circle at 40% 40%, #67e8f9, #06b6d4);
+  animation: orbFloat 10s ease-in-out infinite 1s;
+}
+.orb-3d--violet {
+  background: radial-gradient(circle at 50% 50%, #c4b5fd, #8b5cf6);
+  animation: orbFloat 9s ease-in-out infinite 0.5s;
+}
+.orb-3d--amber {
+  background: radial-gradient(circle at 35% 35%, #fcd34d, #f59e0b);
+  animation: orbFloat 11s ease-in-out infinite 2s;
+}
+@keyframes orbFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(8px, -12px) scale(1.05); }
+  50% { transform: translate(-5px, 8px) scale(0.98); }
+  75% { transform: translate(10px, 5px) scale(1.02); }
+}
+.orb-3d--slow {
+  animation: orbFloatSlow 14s ease-in-out infinite;
+}
+@keyframes orbFloatSlow {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(15px, -20px) rotate(5deg); }
+  66% { transform: translate(-10px, 10px) rotate(-3deg); }
+}

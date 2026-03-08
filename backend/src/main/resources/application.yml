@@ -1,0 +1,22 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: splitwise-backend
+  datasource:
+    url: jdbc:sqlite:data/splitwise.db
+    driver-class-name: org.sqlite.JDBC
+  jpa:
+    database-platform: org.hibernate.community.dialect.SQLiteDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate.format_sql: true
+    open-in-view: false
+
+logging:
+  level:
+    com.splitwise: INFO
+    org.springframework.web: INFO
